@@ -1,0 +1,26 @@
+{
+  "name": "cdva-merges",
+  "version": "0.0.1",
+  "description": "Automates the creation of the Cordova merges folders for each platform added to the project",
+  "keywords": [
+    "cordova",
+    "merges"
+  ],
+  "author": {
+    "name": "John M. Wargo",
+    "email": "john@johnwargo.com",
+    "url": "http://www.johnwargo.com/"
+  },
+  "license": "Apache-2.0",
+  "main": "cordova-make-merges.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "cdvamerges": "cordova-make-merges.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johnwargo/make-merges"
+  }
+}
