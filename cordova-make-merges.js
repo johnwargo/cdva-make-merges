@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+"use strict";
 
 //========================================================================
 // Cordova-make-merges
@@ -7,6 +8,10 @@
 //
 // by John M. Wargo (www.johnwargo.com)
 //========================================================================
+//todo: read platforms.json rather than folder listing
+//todo: use the cordova module(s) to determine if Cordova project folder?
+//todo: use the cordova module(s) to get platforms list?
+
 //*************************************
 //some constants
 //*************************************
@@ -17,8 +22,6 @@ var path = require('path');
 //Change debug to false for production use
 var debug = false;
 
-//Displayed by the -v command-line switch
-var appVersion = "0.0.6";
 //Get the current folder
 var currFolder = process.cwd();
 //figure out what the target merges folder is
@@ -80,7 +83,7 @@ function getPlatformsFolderList() {
   function whackItem(theList, key) {
     var idx = theList.indexOf(key);
     if (idx > -1) {
-      theList.splice(idx);
+      theList.splice(idx, 1);
     }
   }
 
@@ -152,11 +155,6 @@ if (checkValue(userArgs, '?')) {
   var raw = fs.readFileSync(path.join(__dirname, 'help.txt')).toString('utf8');
   //write the contents of the help file to the console
   console.log(raw);
-  process.exit(1);
-}
-//Look for -v on the command line
-if (checkValue(userArgs, '-v')) {
-  console.log('Version %s', appVersion);
   process.exit(1);
 }
 

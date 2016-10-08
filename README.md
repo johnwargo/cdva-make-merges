@@ -1,5 +1,5 @@
 Cordova Make Merges (cdva-merges)
-================================
+=================================
 
 A node module that automates the creation of a Cordova project's merges folders, using the project's list of platforms as a guide.
 
@@ -19,20 +19,15 @@ Usage
 
 Execute the module by executing the `cdva-merges` command at a command-line. 
 
-The module accepts the following command-line switches:
+The module accepts the following command-line switch:
 
-+ `-v` - Show module version on the terminal
-+ `?` - Display the help file
+`?` - Display the help file
 
 **Examples:**
 
 To display this help file, issue the following command:
 
     cdva-merges ?
-
-To display the application version, use the following command:
-
-    cdva-merges -v
 	
 To create merges folders for each platform added to a Cordova application project use the following command:
 
