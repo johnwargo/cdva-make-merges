@@ -21,23 +21,22 @@ Execute the module by executing the `cdva-merges` command at a command-line.
 
 The module accepts the following command-line switches:
 
-`-v`: Show module version on the terminal
-
-`?`: Display the help file
++ `-v` - Show module version on the terminal
++ `?` - Display the help file
 
 **Examples:**
 
 To display this help file, issue the following command:
 
-    cdvamerges ?
+    cdva-merges ?
 
 To display the application version, use the following command:
 
-    cdvamerges -v
+    cdva-merges -v
 	
 To create merges folders for each platform added to a Cordova application project use the following command:
 
-    cdvamerges
+    cdva-merges
 
 The module will read the Cordova project's configuration to determine which platforms have been added then make sure the merges folder exists (if not, it will create it for you), then create a folder in the merges folder for each platform.
 
