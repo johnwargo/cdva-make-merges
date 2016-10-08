@@ -10,9 +10,12 @@
 //*************************************
 //some constants
 //*************************************
-var colors = require('colors'),
-  fs = require('fs'),
-  path = require('path');
+var colors = require('colors');
+var fs = require('fs');
+var path = require('path');
+
+//Change debug to false for production use
+var debug = false;
 
 //Displayed by the -v command-line switch
 var appVersion = "0.0.1";
@@ -24,19 +27,19 @@ var mergesFolder = path.join(currFolder, 'merges');
 var platformsFolder = path.join(currFolder, 'platforms');
 //Used to store the list of all folders that will be created
 var folderList = [];
-var theStars = "************************************";
+var theStars = "*************************************";
 
-//function listArray(theName, theArray) {
-//  if (theArray.length > 0) {
-//    //Write the contents of an array to the console
-//    console.log("\n%s Array Contents", theName);
-//    for (i = 0; i < theArray.length; i++) {
-//      console.log("%s[%s]: '%s'", theName, i, theArray[i]);
-//    }
-//  } else {
-//    console.log('\n%s array is empty', theName);
-//  }
-//}
+function listArray(theName, theArray) {
+  if (theArray.length > 0) {
+    //Write the contents of an array to the console
+    console.log("\n%s Array Contents", theName);
+    for (i = 0; i < theArray.length; i++) {
+      console.log("%s[%s]: '%s'", theName, i, theArray[i]);
+    }
+  } else {
+    console.log('\n%s array is empty', theName);
+  }
+}
 
 //===================================================================
 // Simple function to check for a value in an array
@@ -48,20 +51,25 @@ function checkValue(theArray, theVal) {
 //===================================================================
 // Figure out if this thing 'feels' like a Cordova project folder
 //===================================================================
-function isCorddovaProjectFolder() {
+function isCordovaProjectFolder() {
+
   //Validate the file path exists
   function checkPath(filePath) {
-    console.log('Checking for %s', filePath);
+    //console.log('Checking for %s', filePath);
     if (fs.existsSync(filePath)) {
-      console.log("Found it!".green);
+      console.log('Found: %s', filePath);
       return true;
     } else {
-      console.log("File path not found\n".red);
+      console.log('Missing: %s'.yellow, filePath);
       return false;
     }
   }
+
+  console.log('Validating Cordova project folder contents:');
   //Do our check of all the required paths
-  return (checkPath(path.join(currFolder, 'config.xml')) && checkPath(path.join(currFolder, 'www')) && checkPath(path.join(currFolder, 'platforms')));
+  //The code will kick out at the first failure
+  return (checkPath(path.join(currFolder, 'config.xml')) && checkPath(path.join(currFolder, 'www')) &&
+  checkPath(path.join(currFolder, 'platforms')));
 }
 
 //===================================================================
@@ -77,26 +85,28 @@ function getPlatformsFolderList() {
   }
 
   //We know the folder exists, so go read the folder's contents
-  console.log('\nSearching %s', platformsFolder);
+  console.log('Checking platforms folder contents');
   folderList = fs.readdirSync(platformsFolder);
   //Next strip the '.' entry
   whackItem(folderList, '.');
   //and the '..' entry
   whackItem(folderList, '..');
   //Write the folder list to the screen
-  //listArray('Folders', folderList);
-  //and return what's left
+  if (debug) {
+    listArray('Folders', folderList);
+  }
+  //return what's left
   return folderList;
 }
 
 function makeFolder(folderPath) {
   if (!fs.existsSync(folderPath)) {
     //No? Then create the folder
-    console.log('Creating %s', folderPath);
+    console.log('Creating "%s"'.green, folderPath);
     fs.mkdirSync(folderPath);
   } else {
     //Yes? Then skip it.
-    console.log('Skipping %s'.yellow, folderPath);
+    console.log('Skipping "%s", already exists'.yellow, folderPath);
   }
 }
 
@@ -104,27 +114,32 @@ function makeFolder(folderPath) {
 //Write out what we're running
 //========================================================================
 console.log("\n%s".green, theStars);
-console.log("* Cordova Make Merges (cdvamerges) *".green);
+console.log("* Cordova Make Merges (cdva-merges) *".green);
 console.log("%s".green, theStars);
-
 console.log('Current folder: %s', currFolder);
-console.log('Merges folder: %s', mergesFolder);
-console.log('Platforms folder: %s\n', platformsFolder);
 
 //========================================================================
 //Sort out the command line arguments
 //========================================================================
 var userArgs;
-//Is the first item 'node'? then we're testing
-if (process.argv[0].toLowerCase() == 'node') {
+//Is the first item 'node' or does it contain node.exe? Then we're testing!
+//Yes, I could simply look for the word 'node' in the first parameter, but these
+//are two specific cases I found in my testing, so I coded specifically to them.
+if (process.argv[0].toLowerCase() === 'node' || process.argv[0].indexOf('node.exe') > -1) {
+  //if (process.argv[0].toLowerCase() == 'node') {
   //whack the first two items off of the list of arguments
-  //This removes the node entry as well as the module name
-  //This should only apply during testing
+  //This removes the node entry as well as the cordova-create entry (the
+  //program we're running)
   userArgs = process.argv.slice(2);
 } else {
   //whack the first item off of the list of arguments
-  //This removes just the module name
+  //This removes just the cva-create entry
   userArgs = process.argv.slice(1);
+}
+//What's left at this point is just all of the parameters
+//If debug mode is enabled, print all of the parameters to the console
+if (debug) {
+  listArray('Arguments', userArgs);
 }
 
 //========================================================================
@@ -140,18 +155,19 @@ if (checkValue(userArgs, '?')) {
 }
 //Look for -v on the command line
 if (checkValue(userArgs, '-v')) {
-  console.log('Cordova Make Merges (cdvamerges) Version %s\n', appVersion);
+  console.log('Cordova Make Merges (cdva-merges) Version %s\n', appVersion);
   process.exit(1);
 }
 
 //Are we in a Cordova project folder?
-if (isCorddovaProjectFolder()) {
+if (isCordovaProjectFolder()) {
   //Houston, we have a Cordova project folder
-  console.log('Folder looks like a Cordova project folder.');
+  console.log('Confirmed Cordova project folder');
   //Get the list of platforms added to the project
   folderList = getPlatformsFolderList();
   //See if we have any folders to process
   if (folderList.length > 0) {
+    console.log('Found %s platforms, creating folders:', folderList.length);
     //Do we have a merges folder? Make it if not
     makeFolder(mergesFolder);
     //Create the other folders we need 
@@ -161,12 +177,15 @@ if (isCorddovaProjectFolder()) {
     }
   } else {
     //No folders to process  
-    console.error("\nNo platforms folders to process\n".red);
+    console.error("The Cordova project does not contain any platforms.".yellow);
+    console.error("\nPlease add one or more platforms to the project and try again.");
+    process.exit(1);
   }
 } else {
-  console.error("This folder doesn't look like it's a Cordova project folder.\n".red);
+  console.error("This folder is not a Cordova project folder.".red);
+  console.error("\nPlease navigate to a Cordova project folder and try again.");
   process.exit(1);
 }
 
 //We made it this far, so we must have done something
-console.log("All done!");
+console.log("\nAll done!");

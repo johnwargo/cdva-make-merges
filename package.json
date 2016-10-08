@@ -13,14 +13,18 @@
   },
   "license": "Apache-2.0",
   "main": "cordova-make-merges.js",
+  "preferGlobal": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "cdvamerges": "cordova-make-merges.js"
+    "cdva-merges": "cordova-make-merges.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/johnwargo/make-merges"
+  },
+  "dependencies": {
+    "colors": "^1.1.2"
   }
 }
