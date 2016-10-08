@@ -18,7 +18,7 @@ var path = require('path');
 var debug = false;
 
 //Displayed by the -v command-line switch
-var appVersion = "0.0.1";
+var appVersion = "0.0.2";
 //Get the current folder
 var currFolder = process.cwd();
 //figure out what the target merges folder is
@@ -116,7 +116,6 @@ function makeFolder(folderPath) {
 console.log("\n%s".green, theStars);
 console.log("* Cordova Make Merges (cdva-merges) *".green);
 console.log("%s".green, theStars);
-console.log('Current folder: %s', currFolder);
 
 //========================================================================
 //Sort out the command line arguments
@@ -155,10 +154,11 @@ if (checkValue(userArgs, '?')) {
 }
 //Look for -v on the command line
 if (checkValue(userArgs, '-v')) {
-  console.log('Cordova Make Merges (cdva-merges) Version %s\n', appVersion);
+  console.log('Version %s', appVersion);
   process.exit(1);
 }
 
+console.log('Current folder: %s', currFolder);
 //Are we in a Cordova project folder?
 if (isCordovaProjectFolder()) {
   //Houston, we have a Cordova project folder
