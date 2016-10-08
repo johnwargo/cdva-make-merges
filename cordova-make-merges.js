@@ -18,7 +18,7 @@ var path = require('path');
 var debug = false;
 
 //Displayed by the -v command-line switch
-var appVersion = "0.0.2";
+var appVersion = "0.0.6";
 //Get the current folder
 var currFolder = process.cwd();
 //figure out what the target merges folder is
@@ -91,6 +91,8 @@ function getPlatformsFolderList() {
   whackItem(folderList, '.');
   //and the '..' entry
   whackItem(folderList, '..');
+  //finally the platforms.json file
+  whackItem(folderList, 'platforms.json');
   //Write the folder list to the screen
   if (debug) {
     listArray('Folders', folderList);
