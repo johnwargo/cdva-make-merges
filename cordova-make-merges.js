@@ -116,6 +116,14 @@ function makeFolder(folderPath) {
     }
 }
 
+function getLastPathItem(thePath, theSep) {
+    //Pull the last item off of a file path using theSep
+    //Start by making an array of path parts, separated by theSep
+    var pathParts = thePath.split(theSep);
+    //Grab the last entry in the array
+    return pathParts.slice(-1)[0];
+}
+
 //========================================================================
 //Write out what we're running
 //========================================================================
